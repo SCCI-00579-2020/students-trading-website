@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About us</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn/font-awesome/4.7.0/font-awesome.min.css">
+</head>
+<body>
+
+    <div class="header">
+
+     
+    <div class="container">
+        <div class="navbar">
+           
+            <nav>
+                <ul id="MenuItems">
+                    <li><a href="register.php">Register</a></li>
+                    <li><a href="">About</a></li>                                       
+                    <li><a href="login.php">Login</a></li>
+                    
+                </ul>
+            </nav>
+            <img src="imagesk/iconmenu.png" class="Menu-icon" onclick="menutoggle()">
+
+            
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <h1>Second hand trading Website<br> Student paradise!</h1>
+                <p>save money.<br> Ouen as saveeam of </p>
+                <h2>Where to find us</h2>
+                
+                <p> instagram : KitchenCart<br>Email: <a href="">kitchencart@gmail.com</a></p>
+                   
+
+            </div>
+            
+            <div class="row">
+                <img src="imagesk/backgrorlogo.jpg">
+                
+            </div>
+        </div>
+
+    </div>
+    </div>
+                
+
+
+    <script>
+        var MenuItems = document.getElementById("MenuItems");
+
+        MenuItems.style.maxHeight = "0px";
+
+        function menutoggle(){
+            if(MenuItems.style.maxHeight == "0px")
+            {
+                MenuItems.style.maxHeight = "200px"
+            }
+            else
+            {
+                MenuItems.style.maxHeight = "0px"
+            }
+        }
+    </script>
+
+
+
+
+</body>
+</html>

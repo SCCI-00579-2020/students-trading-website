@@ -1,6 +1,15 @@
 <?php
 session_start();
-require "config.php";
+$HOSTNAME = 'localhost';
+$USERNAME = 'root';
+$PASSWORD = '';
+$DATABASE = 'online_store';
+
+$conn = mysqli_connect($HOSTNAME, $USERNAME, $PASSWORD, $DATABASE);
+
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
 
 if (!isset($_SESSION["id"])) {
     header("Location: login.php");
@@ -26,22 +35,26 @@ if (!$user) {
 
 // Update user details
 if (isset($_POST["update"])) {
-    $first_name = $_POST["name"];
-    $surname = $_POST["surname"];
-    $username = $_POST["username"];
-    $email = $_POST["email"];
-    $phone_number = $_POST["number"];
+    $first_name = htmlspecialchars($_POST["name"]);
+    $surname = htmlspecialchars($_POST["surname"]);
+    $username = htmlspecialchars($_POST["username"]);
+    $email = htmlspecialchars($_POST["email"]);
+    $phone_number = htmlspecialchars($_POST["number"]);
 
-    $updateQuery = "UPDATE buyer SET first_name = ?, surname = ?, username = ?, email = ?, phone_number = ? WHERE id = ?";
-    $stmt = mysqli_prepare($conn, $updateQuery);
-    mysqli_stmt_bind_param($stmt, "sssssi", $first_name, $surname, $username, $email, $phone_number, $userId);
-
-    if (mysqli_stmt_execute($stmt)) {
-        $message = "Profile updated successfully!";
+    if (!preg_match('/@students\.tukenya\.ac\.ke$/', $email)) {
+        $message = "Update Failed: This is only accessible to TUK students.";
     } else {
-        $message = "Error: " . mysqli_stmt_error($stmt);
+        $updateQuery = "UPDATE buyer SET first_name = ?, surname = ?, username = ?, email = ?, phone_number = ? WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $updateQuery);
+        mysqli_stmt_bind_param($stmt, "sssssi", $first_name, $surname, $username, $email, $phone_number, $userId);
+
+        if (mysqli_stmt_execute($stmt)) {
+            $message = "Profile updated successfully!";
+        } else {
+            $message = "Error: " . mysqli_stmt_error($stmt);
+        }
+        mysqli_stmt_close($stmt);
     }
-    mysqli_stmt_close($stmt);
 }
 
 // Delete user account
@@ -127,17 +140,17 @@ if (isset($_POST["delete"])) {
         <div class="message"><?php echo $message; ?></div>
         <form action="" method="post" autocomplete="off">
             <label for="name">First name:</label>
-            <input type="text" name="name" id="first_name" placeholder="Enter first name" required value="<?php echo $user['first_name']; ?>">
+            <input type="text" name="name" id="first_name" placeholder="Enter first name" required value="<?php echo htmlspecialchars($user['first_name']); ?>">
             <label for="surname">Surname:</label>
-            <input type="text" name="surname" id="surname" placeholder="Enter surname" required value="<?php echo $user['surname']; ?>">
+            <input type="text" name="surname" id="surname" placeholder="Enter surname" required value="<?php echo htmlspecialchars($user['surname']); ?>">
             <label for="username">Username:</label>
-            <input type="text" name="username" id="username" placeholder="Enter username" required value="<?php echo $user['username']; ?>">
+            <input type="text" name="username" id="username" placeholder="Enter username" required value="<?php echo htmlspecialchars($user['username']); ?>">
             <label for="email">Email:</label>
-            <input type="email" name="email" id="email" placeholder="Enter email" required value="<?php echo $user['email']; ?>">
+            <input type="email" name="email" id="email" placeholder="Enter email" required value="<?php echo htmlspecialchars($user['email']); ?>">
             <label for="number">Phone Number:</label>
-            <input type="number" name="number" id="phone_number" placeholder="Enter phone number" required value="<?php echo $user['phone_number']; ?>">
+            <input type="number" name="number" id="phone_number" placeholder="Enter phone number" required value="<?php echo htmlspecialchars($user['phone_number']); ?>">
             <button type="submit" name="update">Update</button>
-            <button type="submit" name="delete" class="delete-btn">Delete Account</button>
+            <button type="submit" name="delete" class="delete-btn" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">Delete Account</button>
         </form>
         <a href="index.php">Go to Home</a>
     </div>
