@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php foreach ($transactions as $transaction): ?>
             <tr>
                 <td><?php echo htmlspecialchars($transaction['product_name']); ?></td>
-                <td>$<?php echo number_format($transaction['amount'], 2); ?></td>
+                <td>ksh<?php echo number_format($transaction['amount'], 2); ?></td>
                 <td><?php echo date('Y-m-d H:i', strtotime($transaction['created_at'])); ?></td>
                 <td><?php echo ucfirst($transaction['status']); ?></td>
                 <td>

@@ -54,7 +54,7 @@ mysqli_close($conn);
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #edf2f7; /* Light background color */
             margin: 0;
             padding: 0;
             display: flex;
@@ -84,6 +84,7 @@ mysqli_close($conn);
         }
         input[type="text"],
         input[type="email"],
+        input[type="username"],
         input[type="password"] {
             padding: 10px;
             margin-bottom: 20px;
@@ -91,7 +92,7 @@ mysqli_close($conn);
             border-radius: 4px;
         }
         input[type="submit"] {
-            background-color: #3498db;
+            background-color: #2c3e50; /* Dark blue background color */
             color: #ffffff;
             padding: 12px;
             border: none;
@@ -101,7 +102,7 @@ mysqli_close($conn);
             transition: background-color 0.3s ease;
         }
         input[type="submit"]:hover {
-            background-color: #2980b9;
+            background-color: #1a2938; /* Darker blue on hover */
         }
     </style>
 </head>
@@ -110,7 +111,7 @@ mysqli_close($conn);
         <h2>Admin Registration</h2>
         <form action="" method="post">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="username" id="username" name="username" required>
 
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>

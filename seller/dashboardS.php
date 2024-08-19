@@ -1,9 +1,12 @@
 <?php
+// Your existing database connection code
 $HOSTNAME = 'localhost';
 $USERNAME = 'root';
 $PASSWORD = '';
 $DATABASE = 'online_store';
 session_start();
+
+// Fetching the user details from session variables
 $first_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : 'Guest';
 $first_initial = strtoupper(substr($first_name, 0, 1));
 
@@ -12,37 +15,57 @@ $conn = mysqli_connect($HOSTNAME, $USERNAME, $PASSWORD, $DATABASE);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-$buyer_id = $_SESSION['user_id'];
-$buyer_email=$_SESSION['email'];
-//counting products one has uploaded
-//$count_query ="SELECT COUNT(*) as orders FROM transaction WHERE buyer_email = ? AND status='pending'";
-$status_queries = [
-    'pending' => "SELECT COUNT(*) as count FROM transactions WHERE buyer_id = ? AND status = 'pending'",
-    'completed' => "SELECT COUNT(*) as count FROM transactions WHERE buyer_id = ? AND status = 'completed'",
-    'funds_released' => "SELECT COUNT(*) as count FROM transactions WHERE buyer_id = ? AND status = 'funds_released'",
-    'refund_requested' => "SELECT COUNT(*) as count FROM transactions WHERE buyer_id = ? AND status = 'refund_requested'"
-];
 
-$counts = [];
+// Check if 'seller_id' is set
+if (isset($_SESSION['seller_id'])) {
+    $seller_id = $_SESSION['seller_id'];
+    $seller_email = $_SESSION['email'];
 
-foreach ($status_queries as $status => $query) {
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "i", $buyer_id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $counts[$status] = mysqli_fetch_assoc($result)['count'];
-    mysqli_stmt_close($stmt);
+    // Counting transactions with different statuses (existing code)
+    $status_queries = [
+        'pending' => "SELECT COUNT(*) as count FROM transactions WHERE seller_id = ? AND status = 'pending'",
+        'completed' => "SELECT COUNT(*) as count FROM transactions WHERE seller_id = ? AND status = 'completed'",
+        'funds_released' => "SELECT COUNT(*) as count FROM transactions WHERE seller_id = ? AND status = 'funds_released'",
+        'refund_requested' => "SELECT COUNT(*) as count FROM transactions WHERE seller_id = ? AND status = 'refund_requested'"
+    ];
+
+    $counts = [];
+
+    foreach ($status_queries as $status => $query) {
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, "i", $seller_id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $counts[$status] = mysqli_fetch_assoc($result)['count'];
+        mysqli_stmt_close($stmt);
+    }
+
+    // Counting products uploaded by the seller (existing code)
+    $product_query = "SELECT COUNT(*) as product_count FROM products WHERE seller_id = ?";
+    $product_stmt = mysqli_prepare($conn, $product_query);
+    mysqli_stmt_bind_param($product_stmt, "i", $seller_id);
+    mysqli_stmt_execute($product_stmt);
+    $product_result = mysqli_stmt_get_result($product_stmt);
+    $product_count = mysqli_fetch_assoc($product_result)['product_count'];
+    mysqli_stmt_close($product_stmt);
+
+    // Counting messages received by the seller
+    $messages_query = "SELECT COUNT(*) as message_count FROM messages WHERE receiver_email = ?";
+    $messages_stmt = mysqli_prepare($conn, $messages_query);
+    if ($messages_stmt === false) {
+        die("Error preparing messages statement: " . mysqli_error($conn));
+    }
+    mysqli_stmt_bind_param($messages_stmt, "s", $seller_email);
+    mysqli_stmt_execute($messages_stmt);
+    $message_result = mysqli_stmt_get_result($messages_stmt);
+    $message_count = mysqli_fetch_assoc($message_result)['message_count'];
+    mysqli_stmt_close($messages_stmt);
+} else {
+    // Handle the case where 'seller_id' is not set
+    echo "Error: Seller ID not found. Please log in.";
+    exit();
 }
-//for products count
-//html code for showing different querries for transaction table
-// // <h4>Pending Orders: <?php echo $counts['pending']; ?></h4>
- <!-- // <h4>Completed Orders: <?php echo $counts['completed']; ?></h4> -->
- <!-- // <h4>Funds Released: <?php echo $counts['funds_released']; ?></h4> -->
-<!-- // <h4>Refund Requested: <?php echo $counts['refund_requested']; ?></h4> -->
-
-
-
-
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -185,22 +208,26 @@ foreach ($status_queries as $status => $query) {
 <body>
     <header>
         <span class="logo">TUK MARKET</span>
-        <div class="search-bar">
-    <button onclick="location.href='browse_products.php'">SEARCH</button>
-</div>
+       
 
     </header>
     <div class="main-content">
-        <div class="sidebar">
-            <ul>
-                <li><a href="#" class="link active">My TUK Trade Circle</a></li>
-                <li><a href="messages.php">My Messages</a></li>
-                <li><a href="rtdash.php">Random Trade</a></li>
-                <li><a href="my_purchases.php">Stuff I got</a></li>                
-                <li><a href="admin/admin_register.php">Admin</a></li>
-                <li><a href="logout.html">Logout</a></li>
-            </ul>
-        </div>
+    <div class="sidebar">
+    <ul>
+        <li><a href="#" class="link active">My TUK Trade Circle</a></li>
+        <li><a href="products.php">Upload Products</a></li>
+        <li><a href="seller_messages.php">My Messages
+            <?php if ($message_count > 0): ?>
+                <span class="message-count">(<?php echo $message_count; ?>)</span>
+            <?php endif; ?>
+        </a></li>            
+        <li><a href="items_funds_released.php">Items Funds Released</a></li>
+        <li><a href="items_on_hold.php">Items on Hold</a></li>
+        <li><a href="items_pending_release.php">Items Pending Release</a></li>
+        <li><a href="logout.html">Logout</a></li>
+    </ul>
+</div>
+
         <div class="content">
             <div class="user-info">
                 <div class="avatar"><?php echo $first_initial; ?></div>
@@ -223,10 +250,18 @@ foreach ($status_queries as $status => $query) {
                     </div>
                 </div>
             </div>
-            
+            <div class="dashboard-section">
+                <h3>My Products</h3>
+                <div class="dashboard-grid">
                     <div class="dashboard-item">
-                    <form action="seller/loginS.php" method="get">
-        <button type="submit" class="sell-button">Sell Now</button>
+                        <h4><?php echo $product_count; ?></h4>
+                        <p>Products Uploaded</p>
+                    </div>
+                 
+                    
+                    <div class="dashboard-item">
+                    <form action="../dashboard.php" method="get">
+        <button type="submit" class="sell-button">Back to home</button>
     </form>
                     </div>
                 </div>

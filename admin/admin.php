@@ -19,26 +19,28 @@ if (!isset($_SESSION['admin_id'])) {
 
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+
+   body{
+    background: url("../images/blue.ng");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+}
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Add a slight white background with opacity to the container */
+            border-radius: 10px;
         }
         h1 {
             color: #2c3e50;
@@ -46,8 +48,9 @@ if (!isset($_SESSION['admin_id'])) {
             margin-bottom: 30px;
         }
         nav {
-            background-color: #3498db;
+            background-color: rgba(52, 152, 219, 0.8); /* Add opacity to the nav background */
             padding: 10px 0;
+            border-radius: 5px;
         }
         nav ul {
             list-style-type: none;
@@ -62,8 +65,8 @@ if (!isset($_SESSION['admin_id'])) {
         nav ul li a {
             color: #fff;
             text-decoration: none;
-            font-size: 18px;
-            padding: 10px 15px;
+            font-size: 20px;
+            padding: 15px 20px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
@@ -78,7 +81,7 @@ if (!isset($_SESSION['admin_id'])) {
             display: inline-block;
             background-color: #e74c3c;
             color: #fff;
-            padding: 10px 20px;
+            padding: 15px 25px;
             text-decoration: none;
             border-radius: 5px;
             transition: background-color 0.3s ease;

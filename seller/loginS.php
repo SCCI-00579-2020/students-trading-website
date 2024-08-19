@@ -49,10 +49,7 @@ if (isset($_POST["submit"])) {
                     $_SESSION['phone_number'] = $row['phone_number'];
                     $_SESSION['seller_id'] = $row['id'];
                     
-                    
-                    
-                  
-                    header("Location: products.php");
+                    header("Location: dashboardS.php");
                     exit();
                 } else {
                     $error_message = "Login failed: Invalid password.";
@@ -68,78 +65,127 @@ if (isset($_POST["submit"])) {
 
 mysqli_close($conn);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    
+    <title>Login to Sell</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #e6eff2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="text"],
-        input[type="password"] {
+
+        .login-container {
             width: 100%;
+            max-width: 400px;
+            background-color: #f2f8fb;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .header-container {
+            background-color: #004d66;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .header-container h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .login-form {
+            padding: 20px;
+        }
+
+        .login-form p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .login-form input[type="email"],
+        .login-form input[type="password"] {
+            width: calc(100% - 20px);
             padding: 10px;
             margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            transition: background-color 0.3s ease;
         }
-        button[type="submit"] {
+
+        .login-form input[type="email"]:focus,
+        .login-form input[type="password"]:focus {
+            background-color: #e0e0e0;
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .login-form input[type="submit"] {
             width: 100%;
             padding: 10px;
-            background-color: #007bff;
-            color: #fff;
+            border-radius: 5px;
             border: none;
-            border-radius: 3px;
+            background-color: #004d66;
+            color: white;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
-        button[type="submit"]:hover {
-            background-color: #0056b3;
+
+        .login-form input[type="submit"]:hover {
+            background-color: #00394d;
         }
-        a {
+
+        .login-form a {
             display: block;
             text-align: center;
             margin-top: 10px;
+            color: #004d66;
+            text-decoration: none;
+            font-size: 14px;
         }
+
+        .login-form a:hover {
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Seller Login</h2>
-        <?php
-        if (!empty($error_message)) {
-            echo "<p style='color: red;'>" . $error_message . "</p>";
-        }
-        if (!empty($debug_message)) {
-            echo "<p style='color: blue;'><strong>Debug info:</strong><br>" . $debug_message . "</p>";
-        }
-        ?>
-        <form action="" method="post" autocomplete="off">
+    <div class="login-container">
+        <div class="header-container">
+            <h2>Login to Sell</h2>
+        </div>
+        <form class="login-form" action="" method="post" autocomplete="off">
+            <?php
+            if (!empty($error_message)) {
+                echo "<p style='color: red;'>" . $error_message . "</p>";
+            }
+            if (!empty($debug_message)) {
+                echo "<p style='color: blue;'><strong>Debug info:</strong><br>" . $debug_message . "</p>";
+            }
+            ?>
             <label for="email">Email:</label>
             <input type="email" name="email" id="email" placeholder="Enter email" required>
             <label for="password">Password:</label>
             <input type="password" name="password" id="password" placeholder="Enter password" required>
-            <button type="submit" name="submit">Login</button>
+            <input type="submit" name="submit" value="Login">
         </form>
         <a href="register.php">Don't have an account? Register here</a>
     </div>

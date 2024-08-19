@@ -65,6 +65,7 @@ if (isset($_POST["submit"])) {
 
     if ($row = mysqli_fetch_assoc($result)) {
         if ($password === $row['password']) {
+         
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['email'] = $row['email'];
             $_SESSION['first_name'] = $row['first_name'];
@@ -104,7 +105,7 @@ mysqli_close($conn);
     font-family: 'Poppins', sans-serif;
 }
 body{
-    background: url("imagesk/backgrorlogo.jpg");
+    background: url("images/back.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -121,7 +122,7 @@ body{
     position: fixed;
     top: 0;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-around;  
     width: 100%;
     height: 100px;
     line-height: 100px;

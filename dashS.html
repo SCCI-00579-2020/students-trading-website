@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .dashboard {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .dashboard h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .dashboard .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .dashboard a {
+            display: block;
+            padding: 15px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #ffffff;
+            text-align: center;
+            width: 45%;
+        }
+        .dashboard a.sell {
+            background-color: #3498db;
+        }
+        .dashboard a.sell:hover {
+            background-color: #2980b9;
+        }
+        .dashboard a.sales {
+            background-color: #2ecc71;
+        }
+        .dashboard a.sales:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Seller Dashboard</h1>
+        <div class="button-container">
+            <a href="sell.php" class="sell">Sell</a>
+            <a href="my_sales.php" class="sales">My Sales</a>
+        </div>
+    </div>
+</body>
+</html>

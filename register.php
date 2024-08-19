@@ -13,6 +13,7 @@ if (!$conn) {
 if (isset($_POST["submit"])) {
     $first_name = htmlspecialchars($_POST['first_name']);
     $surname = htmlspecialchars($_POST['surname']);  
+    $username = htmlspecialchars($_POST['username']); 
     $email = htmlspecialchars($_POST['email']);
     $phone_number = htmlspecialchars($_POST['phone_number']);
     $course = htmlspecialchars($_POST['course']);
@@ -20,14 +21,14 @@ if (isset($_POST["submit"])) {
     $password = $_POST['password'];
 
     if (preg_match('/@students\.tukenya\.ac\.ke$/', $email)) {
-        $query = "INSERT INTO buyer (first_name, surname, email, phone_number, course, school_id, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO buyer (first_name, surname, username, email, phone_number, course, school_id, password) VALUES (?,?, ?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($conn, $query);
 
         if (!$stmt) {
             die("Prepared statement failed: " . mysqli_error($conn));
         }
 
-        mysqli_stmt_bind_param($stmt, "sssssss", $first_name, $surname, $email, $phone_number, $course, $school_id, $password);
+        mysqli_stmt_bind_param($stmt, "ssssssss", $first_name, $surname,$username, $email, $phone_number, $course, $school_id, $password);
 
         if (mysqli_stmt_execute($stmt)) {
             echo "<p>Registration successful! You can now log in.</p>";
@@ -66,7 +67,7 @@ mysqli_close($conn);
     font-family: 'Poppins', sans-serif;
 }
 body{
-    background: url("imagesk/backgrorlogo.jpg");
+    background: url("images/back.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -343,6 +344,11 @@ header{
                 <input type="text" name="surname" class="input-field" placeholder="surname">
                 <i class="bx bx-user"></i>
             </div>
+          
+        </div>
+        <div class="input-box">
+            <input type="tel" name="username" class="input-field" placeholder="username" required>
+            <i class="bx bx-user"></i>
         </div>
         <div class="input-box">
             <input type="tel" name="phone_number" class="input-field" placeholder="Phone Number" required>
@@ -370,10 +376,10 @@ header{
         <div class="two-col">
             <div class="one">
                 <input type="checkbox" id="terms-check">
-                <label for="terms-check"><a href="#">Read and Agree to Terms and Conditions</a></label>
+                <label for="terms-check"><a href="terms.html">By registering you Agree to Terms and Conditions</a></label>
             </div>
             <div class="two">
-                <label><a href="#">Sign up</a></label>
+                <label><a href="login.php">Sign in</a></label>
             </div>
         </div> <!-- This closing tag was missing -->
     </form> <!-- This closing tag was missing -->
@@ -384,7 +390,6 @@ header{
    
     </div>
 </div>
-
 
 
 

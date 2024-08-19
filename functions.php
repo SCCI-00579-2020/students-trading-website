@@ -117,4 +117,3 @@ function getSellerUsernameById($seller_id) {
     $seller = $result->fetch_assoc();
     return $seller['username'];
 }
-?>
